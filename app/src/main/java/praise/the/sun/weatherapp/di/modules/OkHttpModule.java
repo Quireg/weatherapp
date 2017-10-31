@@ -1,18 +1,13 @@
 package praise.the.sun.weatherapp.di.modules;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Singleton;
 
+import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
-import okhttp3.ConnectionPool;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import praise.the.sun.weatherapp.BuildConfig;
 import praise.the.sun.weatherapp.app.WeatherApp;
 
@@ -21,23 +16,14 @@ import praise.the.sun.weatherapp.app.WeatherApp;
  *
  * @author Artur Menchenko
  */
-
+@Module
 public class OkHttpModule {
 
     @Provides
     @Singleton
-    Cache provideOkHttpCache(WeatherApp application) {
-        int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        return new Cache(application.getCacheDir(), cacheSize);
-    }
-
-    @Provides
-    @Singleton
-    OkHttpClient provideOkHttpClient(Cache cache) {
-
+    OkHttpClient provideOkHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.retryOnConnectionFailure(true);
-        builder.cache(cache);
         builder.addInterceptor(chain -> {
             Request original = chain.request();
             HttpUrl originalHttpUrl = original.url();

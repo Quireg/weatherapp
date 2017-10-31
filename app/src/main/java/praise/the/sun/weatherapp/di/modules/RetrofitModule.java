@@ -24,7 +24,7 @@ import rx.schedulers.Schedulers;
  * @author Artur Menchenko
  */
 
-@Module
+@Module(includes = {OkHttpModule.class})
 public class RetrofitModule {
     @Provides
     @Singleton

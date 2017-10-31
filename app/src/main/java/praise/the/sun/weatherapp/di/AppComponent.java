@@ -6,8 +6,9 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import praise.the.sun.weatherapp.di.modules.ContextModule;
-import praise.the.sun.weatherapp.di.modules.OkHttpModule;
-import praise.the.sun.weatherapp.di.modules.RetrofitModule;
+import praise.the.sun.weatherapp.di.modules.WeatherAppModule;
+import praise.the.sun.weatherapp.mvp.WeatherAppService;
+import praise.the.sun.weatherapp.mvp.presenters.DetermineLocationPresenter;
 
 /**
  * Date 10/30/2017.
@@ -15,8 +16,11 @@ import praise.the.sun.weatherapp.di.modules.RetrofitModule;
  * @author Artur Menchenko
  */
 @Singleton
-@Component(modules = {ContextModule.class, RetrofitModule.class, OkHttpModule.class})
+@Component(modules = {ContextModule.class, WeatherAppModule.class})
 public interface AppComponent {
     Context getContext();
+    WeatherAppService getWeatherService();
+
+    void inject(DetermineLocationPresenter determineLocationPresenter);
 
 }
