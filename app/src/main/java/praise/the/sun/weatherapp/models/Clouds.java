@@ -1,7 +1,9 @@
-package praise.the.sun.weatherapp.mvp.models;
+package praise.the.sun.weatherapp.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import io.realm.RealmObject;
 
 /**
  * Date 10/30/2017.
@@ -9,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Artur Menchenko
  */
 
-public class Clouds {
+public class Clouds extends RealmObject {
 
     @SerializedName("all")
     @Expose

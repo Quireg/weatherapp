@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.MvpPresenter;
 import com.arellomobile.mvp.MvpView;
 
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Date 10/31/2017.
@@ -15,14 +15,14 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class BasePresenter<View extends MvpView> extends MvpPresenter<View> {
-    private CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    protected void unsubscribeOnDestroy(@NonNull Subscription subscription) {
-        compositeSubscription.add(subscription);
+    protected void disposeOnDestroy(@NonNull Disposable disposable) {
+        compositeDisposable.add(disposable);
     }
 
     @Override public void onDestroy() {
         super.onDestroy();
-        compositeSubscription.clear();
+        compositeDisposable.clear();
     }
 }

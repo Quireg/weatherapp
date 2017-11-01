@@ -1,38 +1,38 @@
 package praise.the.sun.weatherapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.skyfishjy.library.RippleBackground;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import praise.the.sun.weatherapp.models.Weather;
 import praise.the.sun.weatherapp.mvp.presenters.DetermineLocationPresenter;
-import praise.the.sun.weatherapp.mvp.presenters.WeatherPresenter;
 import praise.the.sun.weatherapp.mvp.views.DetermineLocationView;
-import praise.the.sun.weatherapp.mvp.views.WeatherView;
 
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
-public class MainActivity extends AppCompatActivity implements DetermineLocationView, WeatherView {
+public class MainActivity extends MvpAppCompatActivity implements DetermineLocationView {
 
     @InjectPresenter DetermineLocationPresenter mDetermineLocationPresenter;
-    @InjectPresenter WeatherPresenter mWeatherPresenter;
 
     @BindView(R.id.rippleBackground) RippleBackground rippleBackground;
     @BindView(R.id.centerImage)ImageView rippleImageView;
     @BindView(R.id.loading) TextView loadingText;
 
     public static final int REQUEST_ACCESS_FINE_LOCATION = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +45,9 @@ public class MainActivity extends AppCompatActivity implements DetermineLocation
     @Override
     protected void onStart() {
         super.onStart();
-        mDetermineLocationPresenter.startDetermingLocation();
-
         rippleImageView.setOnClickListener(view -> {
             initGps();
-            mDetermineLocationPresenter.startDetermingLocation();
+            mDetermineLocationPresenter.onImageTap();
         });
     }
 
@@ -77,40 +75,64 @@ public class MainActivity extends AppCompatActivity implements DetermineLocation
 
     @Override
     public void setIdleState() {
-        rippleBackground.stopRippleAnimation();
+        if(rippleBackground.isRippleAnimationRunning()){
+            rippleBackground.stopRippleAnimation();
+        }
         loadingText.setVisibility(View.INVISIBLE);
 
     }
 
     @Override
     public void setLocationLookupState() {
-        rippleBackground.startRippleAnimation();
+        changeRippleBackgroundAnimation(true);
         loadingText.setVisibility(View.VISIBLE);
         loadingText.setText("Determining your location...");
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
-    public void setFetchingDataState() {
-        rippleBackground.startRippleAnimation();
+    public void setFetchingDataState(Location location) {
+        changeRippleBackgroundAnimation(true);
         loadingText.setVisibility(View.VISIBLE);
-        loadingText.setText("Fetching data...");
-
+        loadingText.setText(String.format("Fetching data for coordinates:\n %f, %f ", location.getLongitude(), location.getLatitude()));
     }
 
     @Override
     public void setLocationLookupFailureState() {
-        rippleBackground.stopRippleAnimation();
+        changeRippleBackgroundAnimation(false);
         loadingText.setText("Failed to determine your location =(");
     }
 
     @Override
-    public void setFetchingDataFailureState() {
-        rippleBackground.stopRippleAnimation();
-        loadingText.setText("Failed to fetch weather data for your location =(");
+    public void setFetchingDataFailureState(String errorMessage) {
+        changeRippleBackgroundAnimation(false);
+        loadingText.setText("Failed to fetch weather data for your location. Error message: " + errorMessage);
     }
 
     @Override
-    public void showWeather() {
+    public void setFetchingCompletedState() {
+        changeRippleBackgroundAnimation(false);
+        loadingText.setText("Blaze it!");
 
+        Intent i =  new Intent(this, WeatherActivity.class);
+        i.setAction(Intent.ACTION_MAIN);
+        startActivity(i);
+        finish();
+    }
+
+    private void changeRippleBackgroundAnimation(boolean shouldAnimate){
+        if(rippleBackground == null){
+            return;
+        }
+        if(rippleBackground.isRippleAnimationRunning()){
+            if(!shouldAnimate){
+                rippleBackground.stopRippleAnimation();
+            }
+        }
+        if(!rippleBackground.isRippleAnimationRunning()){
+            if(shouldAnimate){
+                rippleBackground.startRippleAnimation();
+            }
+        }
     }
 }

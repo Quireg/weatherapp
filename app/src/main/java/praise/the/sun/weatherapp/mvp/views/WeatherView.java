@@ -4,6 +4,8 @@ import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 
+import praise.the.sun.weatherapp.models.Weather;
+
 /**
  * Date 10/31/2017.
  *
@@ -11,5 +13,5 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
  */
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface WeatherView extends MvpView {
-    void showWeather();
+    void showWeather(Weather weather);
 }

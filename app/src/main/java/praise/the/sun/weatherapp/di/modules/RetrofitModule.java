@@ -14,10 +14,9 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.schedulers.Schedulers;
-
+import io.reactivex.schedulers.Schedulers;
 /**
  * Date 10/30/2017.
  *
@@ -36,7 +35,7 @@ public class RetrofitModule {
     @Singleton
     public Retrofit.Builder provideRetrofitBuilder(Converter.Factory converterFactory, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(converterFactory)
                 .client(okHttpClient);
     }
@@ -51,11 +50,11 @@ public class RetrofitModule {
     @Singleton
     Gson provideGson() {
         return new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                .setFieldNamingStrategy(new CustomFieldNamingPolicy())
-                .setPrettyPrinting()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
-                .serializeNulls()
+//                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+//                .setFieldNamingStrategy(new CustomFieldNamingPolicy())
+//                .setPrettyPrinting()
+//                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+//                .serializeNulls()
                 .create();
     }
 

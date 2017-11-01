@@ -1,10 +1,9 @@
 package praise.the.sun.weatherapp.app;
 
-import praise.the.sun.weatherapp.BuildConfig;
-import praise.the.sun.weatherapp.mvp.models.Weather;
+import io.reactivex.Observable;
+import praise.the.sun.weatherapp.models.Weather;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Date 10/30/2017.

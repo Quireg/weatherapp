@@ -8,18 +8,23 @@ import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 
+
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import praise.the.sun.weatherapp.app.WeatherApp;
+import praise.the.sun.weatherapp.db.DbService;
 import praise.the.sun.weatherapp.mvp.WeatherAppService;
-import praise.the.sun.weatherapp.mvp.models.Weather;
+import praise.the.sun.weatherapp.models.Weather;
 import praise.the.sun.weatherapp.mvp.views.DetermineLocationView;
-import rx.Observable;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
 
 /**
  * Date 10/31/2017.
@@ -30,11 +35,14 @@ import rx.schedulers.Schedulers;
 @InjectViewState
 public class DetermineLocationPresenter extends BasePresenter<DetermineLocationView> {
 
-    @Inject
-    Context mContext;
-    @Inject
-    WeatherAppService mWeatherAppService;
+    private static final String LOG_TAG = DetermineLocationPresenter.class.getSimpleName();
 
+    @Inject Context mContext;
+    @Inject WeatherAppService mWeatherAppService;
+    @Inject DbService dbService;
+
+    private Disposable weatherSubscription;
+    private boolean isProcessing = false;
 
     public DetermineLocationPresenter() {
         WeatherApp.getAppComponent().inject(this);
@@ -47,24 +55,42 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
 
     }
 
-    public void startDetermingLocation(){
+    public void onImageTap(){
+
+        if(isProcessing){
+            isProcessing = false;
+            getViewState().setIdleState();
+
+            if(!weatherSubscription.isDisposed()){
+                weatherSubscription.dispose();
+                weatherSubscription = null;
+            }
+            return;
+        }
+
+        isProcessing = true;
         getViewState().setLocationLookupState();
         Location location = getLastBestLocation();
+
         if(location == null){
             getViewState().setLocationLookupFailureState();
         }else{
-            getViewState().setFetchingDataState();
+            getViewState().setFetchingDataState(location);
 
             final Observable<Weather> observable = mWeatherAppService.getWeather(location.getLatitude(), location.getLongitude());
-            Subscription subscription = observable
+            weatherSubscription = observable
                     .subscribeOn(Schedulers.io())
+                    .flatMap((w) -> dbService.save(w))
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(weather -> {
-                        System.out.println(weather.toString());
+                        Log.d(LOG_TAG, weather.getName());
+                        getViewState().setFetchingCompletedState();
                     }, error -> {
-
+                        getViewState().setFetchingDataFailureState(error.getMessage());
+                        Log.e(LOG_TAG, error.getMessage());
                     });
 
-            unsubscribeOnDestroy(subscription);
+            disposeOnDestroy(weatherSubscription);
         }
 
     }

@@ -8,6 +8,7 @@ import okhttp3.Cache;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import praise.the.sun.weatherapp.BuildConfig;
 import praise.the.sun.weatherapp.app.WeatherApp;
 
@@ -39,6 +40,9 @@ public class OkHttpModule {
             Request request = requestBuilder.build();
             return chain.proceed(request);
         });
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.addInterceptor(loggingInterceptor);
         return builder.build();
 
     }

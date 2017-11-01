@@ -1,8 +1,10 @@
-package praise.the.sun.weatherapp.mvp.models;
+package praise.the.sun.weatherapp.models;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Date 10/30/2017.
@@ -10,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Artur Menchenko
  */
 
-public class Weather {
+public class Weather extends RealmObject {
 
     @SerializedName("coord")
     @Expose
@@ -18,9 +20,9 @@ public class Weather {
     @SerializedName("sys")
     @Expose
     private Sys sys;
-    @SerializedName("weather")
-    @Expose
-    private List<Weather_> weather = null;
+//    @SerializedName("weather")
+//    @Expose
+//    private List<Weather_> weather = null;
     @SerializedName("main")
     @Expose
     private Main main;
@@ -33,12 +35,13 @@ public class Weather {
     @SerializedName("clouds")
     @Expose
     private Clouds clouds;
+    @PrimaryKey
     @SerializedName("dt")
     @Expose
     private Integer dt;
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("name")
     @Expose
     private String name;
@@ -62,13 +65,13 @@ public class Weather {
         this.sys = sys;
     }
 
-    public List<Weather_> getWeather() {
-        return weather;
-    }
-
-    public void setWeather(List<Weather_> weather) {
-        this.weather = weather;
-    }
+//    public List<Weather_> getWeather() {
+//        return weather;
+//    }
+//
+//    public void setWeather(List<Weather_> weather) {
+//        this.weather = weather;
+//    }
 
     public Main getMain() {
         return main;
@@ -110,11 +113,11 @@ public class Weather {
         this.dt = dt;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

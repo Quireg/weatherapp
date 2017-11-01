@@ -1,7 +1,9 @@
-package praise.the.sun.weatherapp.mvp.models;
+package praise.the.sun.weatherapp.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import io.realm.RealmObject;
 
 /**
  * Date 10/30/2017.
@@ -9,28 +11,28 @@ import com.google.gson.annotations.SerializedName;
  * @author Artur Menchenko
  */
 
-public class Coord {
+public class Coord extends RealmObject {
 
     @SerializedName("lon")
     @Expose
-    private Integer lon;
+    private Double lon;
     @SerializedName("lat")
     @Expose
-    private Integer lat;
+    private Double lat;
 
-    public Integer getLon() {
+    public Double getLon() {
         return lon;
     }
 
-    public void setLon(Integer lon) {
+    public void setLon(Double lon) {
         this.lon = lon;
     }
 
-    public Integer getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(Integer lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
