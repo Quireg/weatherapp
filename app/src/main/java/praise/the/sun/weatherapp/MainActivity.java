@@ -16,19 +16,22 @@ import com.skyfishjy.library.RippleBackground;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import praise.the.sun.weatherapp.mvp.presenters.DetermineLocationPresenter;
+import praise.the.sun.weatherapp.mvp.presenters.WeatherPresenter;
 import praise.the.sun.weatherapp.mvp.views.DetermineLocationView;
+import praise.the.sun.weatherapp.mvp.views.WeatherView;
 
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
-public class MainActivity extends AppCompatActivity implements DetermineLocationView {
-    public static final int REQUEST_ACCESS_FINE_LOCATION = 1;
+public class MainActivity extends AppCompatActivity implements DetermineLocationView, WeatherView {
 
-    @InjectPresenter
-    DetermineLocationPresenter determineLocationPresenter;
+    @InjectPresenter DetermineLocationPresenter mDetermineLocationPresenter;
+    @InjectPresenter WeatherPresenter mWeatherPresenter;
 
     @BindView(R.id.rippleBackground) RippleBackground rippleBackground;
     @BindView(R.id.centerImage)ImageView rippleImageView;
     @BindView(R.id.loading) TextView loadingText;
+
+    public static final int REQUEST_ACCESS_FINE_LOCATION = 1;
 
 
     @Override
@@ -36,14 +39,18 @@ public class MainActivity extends AppCompatActivity implements DetermineLocation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mDetermineLocationPresenter.startDetermingLocation();
+
         rippleImageView.setOnClickListener(view -> {
-            determineLocationPresenter.startDetermingLocation();
+            initGps();
+            mDetermineLocationPresenter.startDetermingLocation();
         });
-
-
-
-
-        initGps();
     }
 
     @Override
@@ -91,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements DetermineLocation
     }
 
     @Override
-    public void setLocationLookuFailureState() {
+    public void setLocationLookupFailureState() {
         rippleBackground.stopRippleAnimation();
         loadingText.setText("Failed to determine your location =(");
     }
@@ -100,5 +107,10 @@ public class MainActivity extends AppCompatActivity implements DetermineLocation
     public void setFetchingDataFailureState() {
         rippleBackground.stopRippleAnimation();
         loadingText.setText("Failed to fetch weather data for your location =(");
+    }
+
+    @Override
+    public void showWeather() {
+
     }
 }

@@ -9,6 +9,7 @@ import praise.the.sun.weatherapp.di.modules.ContextModule;
 import praise.the.sun.weatherapp.di.modules.WeatherAppModule;
 import praise.the.sun.weatherapp.mvp.WeatherAppService;
 import praise.the.sun.weatherapp.mvp.presenters.DetermineLocationPresenter;
+import praise.the.sun.weatherapp.mvp.presenters.WeatherPresenter;
 
 /**
  * Date 10/30/2017.
@@ -22,5 +23,6 @@ public interface AppComponent {
     WeatherAppService getWeatherService();
 
     void inject(DetermineLocationPresenter determineLocationPresenter);
+    void inject(WeatherPresenter weatherPresenter);
 
 }

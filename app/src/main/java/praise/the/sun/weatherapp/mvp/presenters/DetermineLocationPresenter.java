@@ -30,8 +30,10 @@ import rx.schedulers.Schedulers;
 @InjectViewState
 public class DetermineLocationPresenter extends BasePresenter<DetermineLocationView> {
 
-    @Inject Context mContext;
-    @Inject WeatherAppService weatherAppService;
+    @Inject
+    Context mContext;
+    @Inject
+    WeatherAppService mWeatherAppService;
 
 
     public DetermineLocationPresenter() {
@@ -49,10 +51,11 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
         getViewState().setLocationLookupState();
         Location location = getLastBestLocation();
         if(location == null){
-            getViewState().setLocationLookuFailureState();
+            getViewState().setLocationLookupFailureState();
         }else{
             getViewState().setFetchingDataState();
-            final Observable<Weather> observable = weatherAppService.getWeather(location.getLatitude(), location.getLongitude());
+
+            final Observable<Weather> observable = mWeatherAppService.getWeather(location.getLatitude(), location.getLongitude());
             Subscription subscription = observable
                     .subscribeOn(Schedulers.io())
                     .subscribe(weather -> {
@@ -60,13 +63,11 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
                     }, error -> {
 
                     });
+
             unsubscribeOnDestroy(subscription);
         }
 
     }
-
-
-
 
     @Nullable
     private Location getLastBestLocation(){

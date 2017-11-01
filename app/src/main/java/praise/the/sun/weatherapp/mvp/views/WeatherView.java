@@ -9,17 +9,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
  *
  * @author Artur Menchenko
  */
-
 @StateStrategyType(AddToEndSingleStrategy.class)
-public interface DetermineLocationView extends MvpView {
-    void setIdleState();
-
-    void setLocationLookupState();
-
-    void setFetchingDataState();
-
-    void setLocationLookupFailureState();
-
-    void setFetchingDataFailureState();
-
+public interface WeatherView extends MvpView {
+    void showWeather();
 }
