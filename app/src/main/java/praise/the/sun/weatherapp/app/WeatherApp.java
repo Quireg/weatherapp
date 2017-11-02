@@ -2,6 +2,9 @@ package praise.the.sun.weatherapp.app;
 
 import android.app.Application;
 
+import com.jakewharton.threetenabp.AndroidThreeTen;
+
+import io.realm.Realm;
 import praise.the.sun.weatherapp.di.AppComponent;
 import praise.the.sun.weatherapp.di.DaggerAppComponent;
 import praise.the.sun.weatherapp.di.modules.ContextModule;
@@ -19,6 +22,9 @@ public class WeatherApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AndroidThreeTen.init(this);
+        Realm.init(getApplicationContext());
+
 
         sAppComponent = DaggerAppComponent.builder()
                 .contextModule(new ContextModule(this))

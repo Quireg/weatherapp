@@ -15,7 +15,7 @@ android {
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "praise.the.sun.weatherapp"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -63,6 +63,8 @@ dependencies {
 
     compile "com.google.dagger:dagger:$dagger"
     provided "org.glassfish:javax.annotation:10.0-b28"
+
+    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
 
     testCompile "junit:junit:4.12"
     testCompile "org.mockito:mockito-all:1.10.19"

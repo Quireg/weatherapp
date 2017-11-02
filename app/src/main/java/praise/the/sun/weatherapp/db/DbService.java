@@ -41,10 +41,7 @@ public class DbService {
                             realm.commitTransaction();
                             realm.close();
                         })
-                        .doOnNext((weather -> {
-                            Weather w = realm.copyToRealmOrUpdate(weather);
-                            w.getWind();
-                        }))
+                        .doOnNext((realm::copyToRealmOrUpdate))
                 );
     }
 
@@ -53,7 +50,7 @@ public class DbService {
 
         return Observable.just(Weather.class)
                 .flatMap(t -> Observable.just(t)
-                        .map(type -> realm.where(type).findFirst())
+                        .map(type -> realm.where(type).findAllSorted("dt").last())
                 );
 
     }

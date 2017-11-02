@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="tap_the_earth">Tap the earth &lt;3</string>
+    <string name="determining_location">Determining your location…</string>
+    <string name="fetching_data">Fetching data for coordinates:\n %f, %f </string>
+    <string name="determining_location_failure">Failed to determine your location =(
+ Make sure GPS is on and location permission granted.</string>
+    <string name="fetching_data_failure">Failed to fetch weather data for your location. Error message: </string>
+    <string name="proceed_to_weather_screen">Blaze it!</string>
+
 </resources>

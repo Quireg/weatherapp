@@ -14,6 +14,6 @@ import retrofit2.http.Query;
 public interface WeatherApi {
 
     @GET("/data/2.5/weather")
-    Observable<Weather> getWeather(@Query("lat") double lat, @Query("lon") double lon);
+    Observable<Weather> getWeather(@Query("lat") double lat, @Query("lon") double lon, @Query("units") String units);
 
 }

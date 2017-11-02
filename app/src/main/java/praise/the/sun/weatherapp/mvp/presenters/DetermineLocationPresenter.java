@@ -1,6 +1,7 @@
 package praise.the.sun.weatherapp.mvp.presenters;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -56,14 +57,12 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
     }
 
     public void onImageTap(){
-
         if(isProcessing){
             isProcessing = false;
             getViewState().setIdleState();
 
-            if(!weatherSubscription.isDisposed()){
+            if(weatherSubscription != null && !weatherSubscription.isDisposed()){
                 weatherSubscription.dispose();
-                weatherSubscription = null;
             }
             return;
         }
@@ -95,15 +94,18 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
 
     }
 
+    public void onGpsFailure(){
+        getViewState().setLocationLookupFailureState();
+    }
+
     @Nullable
+    @SuppressLint("MissingPermission")
     private Location getLastBestLocation(){
-        if (!isGpsEnabled()) {
+        if (!isGpsOk()) {
+            getViewState().setLocationLookupFailureState();
             return null;
         }
 
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-            return null;
-        }
         LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
         if(locationManager == null){
             return null;
@@ -127,6 +129,14 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
         else {
             return locationNet;
         }
+    }
+
+    private boolean isGpsOk(){
+        return isGpsPermissionOk() && isGpsEnabled();
+    }
+
+    private boolean isGpsPermissionOk(){
+        return ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean isGpsEnabled() {

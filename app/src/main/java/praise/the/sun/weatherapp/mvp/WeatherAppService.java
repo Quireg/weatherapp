@@ -18,7 +18,7 @@ public class WeatherAppService {
         this.weatherApi = weatherApi;
     }
     public Observable<Weather> getWeather(double lat, double lon){
-        return weatherApi.getWeather(lat,lon);
+        return weatherApi.getWeather(lat,lon, "metric");
     }
 
 }

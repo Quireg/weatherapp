@@ -19,7 +19,6 @@ public class DbModule {
     @Provides
     @Singleton
     public DbService provideDb(Context context) {
-        Realm.init(context);
         return new DbService();
     }
 }
