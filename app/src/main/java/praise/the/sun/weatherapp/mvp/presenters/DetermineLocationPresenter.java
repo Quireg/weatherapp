@@ -13,18 +13,17 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 
-
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import praise.the.sun.weatherapp.app.WeatherApp;
 import praise.the.sun.weatherapp.db.DbService;
-import praise.the.sun.weatherapp.mvp.WeatherAppService;
 import praise.the.sun.weatherapp.models.Weather;
+import praise.the.sun.weatherapp.mvp.WeatherAppService;
 import praise.the.sun.weatherapp.mvp.views.DetermineLocationView;
-import io.reactivex.Observable;
 
 
 /**
@@ -38,9 +37,12 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
 
     private static final String LOG_TAG = DetermineLocationPresenter.class.getSimpleName();
 
-    @Inject Context mContext;
-    @Inject WeatherAppService mWeatherAppService;
-    @Inject DbService dbService;
+    @Inject
+    Context mContext;
+    @Inject
+    WeatherAppService mWeatherAppService;
+    @Inject
+    DbService dbService;
 
     private Disposable weatherSubscription;
     private boolean isProcessing = false;
@@ -56,12 +58,12 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
 
     }
 
-    public void onImageTap(){
-        if(isProcessing){
+    public void onImageTap() {
+        if (isProcessing) {
             isProcessing = false;
             getViewState().setIdleState();
 
-            if(weatherSubscription != null && !weatherSubscription.isDisposed()){
+            if (weatherSubscription != null && !weatherSubscription.isDisposed()) {
                 weatherSubscription.dispose();
             }
             return;
@@ -71,9 +73,9 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
         getViewState().setLocationLookupState();
         Location location = getLastBestLocation();
 
-        if(location == null){
+        if (location == null) {
             getViewState().setLocationLookupFailureState();
-        }else{
+        } else {
             getViewState().setFetchingDataState(location);
 
             final Observable<Weather> observable = mWeatherAppService.getWeather(location.getLatitude(), location.getLongitude());
@@ -94,48 +96,49 @@ public class DetermineLocationPresenter extends BasePresenter<DetermineLocationV
 
     }
 
-    public void onGpsFailure(){
+    public void onGpsFailure() {
         getViewState().setLocationLookupFailureState();
     }
 
     @Nullable
     @SuppressLint("MissingPermission")
-    private Location getLastBestLocation(){
+    private Location getLastBestLocation() {
         if (!isGpsOk()) {
             getViewState().setLocationLookupFailureState();
             return null;
         }
 
         LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        if(locationManager == null){
+        if (locationManager == null) {
             return null;
         }
 
         Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        long GPSLocationTime = 0;
-        if (null != locationGPS) { GPSLocationTime = locationGPS.getTime(); }
+        long gpslocationtime = 0;
+        if (null != locationGPS) {
+            gpslocationtime = locationGPS.getTime();
+        }
 
-        long NetLocationTime = 0;
+        long netLocationTime = 0;
 
         if (null != locationNet) {
-            NetLocationTime = locationNet.getTime();
+            netLocationTime = locationNet.getTime();
         }
 
-        if ( 0 < GPSLocationTime - NetLocationTime ) {
+        if (0 < gpslocationtime - netLocationTime) {
             return locationGPS;
-        }
-        else {
+        } else {
             return locationNet;
         }
     }
 
-    private boolean isGpsOk(){
+    private boolean isGpsOk() {
         return isGpsPermissionOk() && isGpsEnabled();
     }
 
-    private boolean isGpsPermissionOk(){
+    private boolean isGpsPermissionOk() {
         return ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 

@@ -25,11 +25,15 @@ import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
 public class MainActivity extends MvpAppCompatActivity implements DetermineLocationView {
 
-    @InjectPresenter DetermineLocationPresenter mDetermineLocationPresenter;
+    @InjectPresenter
+    DetermineLocationPresenter mDetermineLocationPresenter;
 
-    @BindView(R.id.rippleBackground) RippleBackground rippleBackground;
-    @BindView(R.id.centerImage)ImageView rippleImageView;
-    @BindView(R.id.loading) TextView loadingText;
+    @BindView(R.id.rippleBackground)
+    RippleBackground rippleBackground;
+    @BindView(R.id.centerImage)
+    ImageView rippleImageView;
+    @BindView(R.id.loading)
+    TextView loadingText;
 
     public static final int REQUEST_ACCESS_FINE_LOCATION = 1;
 
@@ -53,18 +57,18 @@ public class MainActivity extends MvpAppCompatActivity implements DetermineLocat
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == REQUEST_ACCESS_FINE_LOCATION){
-            if(grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED){
+        if (requestCode == REQUEST_ACCESS_FINE_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
                 //we good
-            }else{
+            } else {
                 mDetermineLocationPresenter.onGpsFailure();
             }
         }
 
     }
 
-    private void initGps(){
-        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+    private void initGps() {
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -109,23 +113,23 @@ public class MainActivity extends MvpAppCompatActivity implements DetermineLocat
         changeRippleBackgroundAnimation(false);
         loadingText.setText(getString(R.string.proceed_to_weather_screen));
 
-        Intent i =  new Intent(this, WeatherActivity.class);
+        Intent i = new Intent(this, WeatherActivity.class);
         i.setAction(Intent.ACTION_MAIN);
         startActivity(i);
         finish();
     }
 
-    private void changeRippleBackgroundAnimation(boolean shouldAnimate){
-        if(rippleBackground == null){
+    private void changeRippleBackgroundAnimation(boolean shouldAnimate) {
+        if (rippleBackground == null) {
             return;
         }
-        if(rippleBackground.isRippleAnimationRunning()){
-            if(!shouldAnimate){
+        if (rippleBackground.isRippleAnimationRunning()) {
+            if (!shouldAnimate) {
                 rippleBackground.stopRippleAnimation();
             }
         }
-        if(!rippleBackground.isRippleAnimationRunning()){
-            if(shouldAnimate){
+        if (!rippleBackground.isRippleAnimationRunning()) {
+            if (shouldAnimate) {
                 rippleBackground.startRippleAnimation();
             }
         }
