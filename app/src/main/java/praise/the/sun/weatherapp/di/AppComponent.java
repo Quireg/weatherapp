@@ -8,7 +8,7 @@ import dagger.Component;
 import praise.the.sun.weatherapp.di.modules.ContextModule;
 import praise.the.sun.weatherapp.di.modules.DbModule;
 import praise.the.sun.weatherapp.di.modules.WeatherAppModule;
-import praise.the.sun.weatherapp.mvp.WeatherAppService;
+import praise.the.sun.weatherapp.mvp.models.WeatherAppService;
 import praise.the.sun.weatherapp.mvp.presenters.DetermineLocationPresenter;
 import praise.the.sun.weatherapp.mvp.presenters.WeatherPresenter;
 

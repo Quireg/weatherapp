@@ -1,4 +1,4 @@
-package praise.the.sun.weatherapp.mvp;
+package praise.the.sun.weatherapp.mvp.models;
 
 import praise.the.sun.weatherapp.app.WeatherApi;
 import praise.the.sun.weatherapp.models.Weather;

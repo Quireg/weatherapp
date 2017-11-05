@@ -5,7 +5,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import praise.the.sun.weatherapp.app.WeatherApi;
-import praise.the.sun.weatherapp.mvp.WeatherAppService;
+import praise.the.sun.weatherapp.mvp.models.WeatherAppService;
 
 /**
  * Date 10/31/2017.
