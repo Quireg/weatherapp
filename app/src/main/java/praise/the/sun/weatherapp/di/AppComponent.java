@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import praise.the.sun.weatherapp.di.modules.ContextModule;
 import praise.the.sun.weatherapp.di.modules.DbModule;
+import praise.the.sun.weatherapp.di.modules.LocationModule;
 import praise.the.sun.weatherapp.di.modules.WeatherAppModule;
 import praise.the.sun.weatherapp.mvp.models.WeatherAppService;
 import praise.the.sun.weatherapp.mvp.presenters.DetermineLocationPresenter;
@@ -18,7 +19,7 @@ import praise.the.sun.weatherapp.mvp.presenters.WeatherPresenter;
  * @author Artur Menchenko
  */
 @Singleton
-@Component(modules = {ContextModule.class, WeatherAppModule.class, DbModule.class})
+@Component(modules = {ContextModule.class, WeatherAppModule.class, DbModule.class, LocationModule.class})
 public interface AppComponent {
     Context getContext();
     WeatherAppService getWeatherService();
