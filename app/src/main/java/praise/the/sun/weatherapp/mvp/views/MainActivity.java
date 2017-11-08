@@ -1,4 +1,4 @@
-package praise.the.sun.weatherapp;
+package praise.the.sun.weatherapp.mvp.views;
 
 import android.Manifest;
 import android.content.Intent;
@@ -18,8 +18,8 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import praise.the.sun.weatherapp.R;
 import praise.the.sun.weatherapp.mvp.presenters.DetermineLocationPresenter;
-import praise.the.sun.weatherapp.mvp.views.DetermineLocationView;
 
 import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 

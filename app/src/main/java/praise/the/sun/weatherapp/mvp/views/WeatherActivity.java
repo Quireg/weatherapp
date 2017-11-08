@@ -1,4 +1,4 @@
-package praise.the.sun.weatherapp;
+package praise.the.sun.weatherapp.mvp.views;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import praise.the.sun.weatherapp.R;
 import praise.the.sun.weatherapp.models.Weather;
 import praise.the.sun.weatherapp.mvp.presenters.WeatherPresenter;
 import praise.the.sun.weatherapp.mvp.views.WeatherView;
